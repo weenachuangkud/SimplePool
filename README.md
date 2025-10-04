@@ -3,4 +3,4 @@ A simple ModuleScript, easy-to-use, statically typed, and thread-safe object poo
 
 Licesnse Under : MIT Licesnse
 
-copyright(c) 2025 Mawin CK
+Copyright(c) 2025 Mawin CK

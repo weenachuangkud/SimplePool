@@ -23,7 +23,11 @@ Mutex exist in this shitty code bc i dont want a race condition
 so i put ts lmao
 ]]
 -- Requires
-local Signal = require(PathTo.Packet.Signal)
+
+-- The Signal im using rn is made by Suphi Kaner from "Packet Networking Library"
+-- https://devforum.roblox.com/t/packet-networking-library/3573907
+local Signal = require(PathTo.Signal) -- You can make your own Signal if you dont like Suphi kaner Signal :(
+-- yk
 local Mutex = require(PathTo.Mutex)
 
 -- Types

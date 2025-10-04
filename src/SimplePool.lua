@@ -31,12 +31,12 @@ local Signal = require(PathTo.Signal) -- You can make your own Signal if you don
 local Mutex = require(PathTo.Mutex)
 
 -- Types
-type Pool = {Instance} -- who tf put this
+-- type Pool = {Instance} -- who tf put this
 
 -- Def
 export type ObjectPool = {
 	Type: "SimplePool",
-	Pool: Pool,
+	Pool: {Instance},
 	GetObject: (self: ObjectPool) -> Instance?,
 	ReturnObject: (self: ObjectPool, obj: Instance) -> (),
 	Prewarm: (self: ObjectPool, amount: number) -> (),

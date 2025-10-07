@@ -5,9 +5,8 @@
 - Date : Saturday, October 4, 2568 BE
 - Dependencies: Requires Signal (event handling) ModuleScripts.
 ]]
--- what a fucking nigger
--- what a fucking nigger
--- what a fucking nigger
+-- suck my penis
+-- i like sonic feets
 
 --[[
 SimplePool: A ModuleScript Library

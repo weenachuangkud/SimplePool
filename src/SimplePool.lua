@@ -37,6 +37,7 @@ export type ObjectPool = {
 	GetObject: (self: ObjectPool) -> Instance?,
 	ReturnObject: (self: ObjectPool, obj: Instance) -> (),
 	Prewarm: (self: ObjectPool, amount: number) -> (),
+	Clear : (self: ObjectPool) -> (),
 	template: Instance,
 	OnGetObject: Signal.Signal, -- Def: <A... = ()>
 	OnReturnObject: Signal.Signal -- Def: <A... = ()>
@@ -90,6 +91,13 @@ function SimplePool:Prewarm(amount: number)
 	for i = 1, amount do
 		table.insert(self.Pool, self.template:Clone())
 	end
+end
+
+function SimplePool:Clear()
+	for i, v in ipairs(self.Pool) do
+		v:Destroy()
+	end
+	self.Pool = {}
 end
 
 return SimplePool

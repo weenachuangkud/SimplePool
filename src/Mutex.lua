@@ -1,4 +1,5 @@
 --- what a fucking nigger
+--- dont even use this code, you're fucking nigger
 --[[
 Modded by Mawin CK
 - Date : Saturday, October 4, 2568 BE

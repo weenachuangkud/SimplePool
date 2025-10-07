@@ -3,35 +3,30 @@
 --[[
 - Auth : Mawin CK
 - Date : Saturday, October 4, 2568 BE
-- Dependencies: Requires Mutex (thread-safe mutex) and Signal (event handling) ModuleScripts.
+- Dependencies: Requires Signal (event handling) ModuleScripts.
 ]]
 
 --[[
 SimplePool: A ModuleScript Library
 - A simple, easy-to-use, statically typed, and thread-safe object pool for reusing Roblox Instances, reducing instantiation overhead.
-- Thread safety is ensured using the Mutex library, allowing safe access in multi-coroutine environments.
 - Features:
   - Statically typed with Luau type annotations for type safety.
-  - Thread-safe operations via Mutex for GetObject and ReturnObject.
   - Simple API: `new`, `GetObject`, `ReturnObject`, `Prewarm`.
   - Signals (`OnGetObject`, `OnReturnObject`) for event-driven programming.
 ]]
 
---[[NOTE : YOU CAN COMMENT OUT MUTEX IF YOU DONT LIKE IT
-is true that roblox lua are single-thread but not always
-Mutex exist in this shitty code bc i dont want a race condition
-so i put ts lmao
-]]
--- Requires
+-- Services
+local Rep = game:GetService("ReplicatedStorage")
 
--- The Signal im using rn is made by Suphi Kaner from "Packet Networking Library"
--- https://devforum.roblox.com/t/packet-networking-library/3573907
-local Signal = require(PathTo.Signal) -- You can make your own Signal if you dont like Suphi kaner Signal :(
--- yk
-local Mutex = require(PathTo.Mutex)
+-- Modules
+local Modules = Rep:WaitForChild("Modules")
+local Libraries = Modules:WaitForChild("Libraries")
+
+-- Requires
+local Signal = require(Libraries.Packet.Signal)
 
 -- Types
--- type Pool = {Instance} -- who tf put this
+--type Pool = {Instance} -- who tf put this
 
 -- Def
 export type ObjectPool = {
@@ -41,7 +36,6 @@ export type ObjectPool = {
 	ReturnObject: (self: ObjectPool, obj: Instance) -> (),
 	Prewarm: (self: ObjectPool, amount: number) -> (),
 	template: Instance,
-	Mutex: Mutex.Mutex, -- i like sonic feets
 	OnGetObject: Signal.Signal, -- Def: <A... = ()>
 	OnReturnObject: Signal.Signal -- Def: <A... = ()>
 }
@@ -55,14 +49,12 @@ function SimplePool.new(template: Instance)
 	self.Type = "SimplePool"
 	self.Pool = {}
 	self.template = template
-	self.Mutex = Mutex.new() 
 	self.OnGetObject = Signal() 
 	self.OnReturnObject = Signal()
 	return self
 end
 
 function SimplePool:GetObject(): Instance?
-	self.Mutex:lock()
 	local obj
 	if #self.Pool > 0 then
 		obj = table.remove(self.Pool)
@@ -76,19 +68,16 @@ function SimplePool:GetObject(): Instance?
 			warn("No template available to create new object")
 		end
 	end
-	self.Mutex:unlock()
 	return obj
 end
 
 function SimplePool:ReturnObject(obj: Instance)
-	if not obj:IsA("Instance") then
+	if typeof(obj) ~= "Instance" then
 		warn("Attempted to return non-Instance object to pool")
 		return
 	end
-	self.Mutex:lock()
 	table.insert(self.Pool, obj)
 	self.OnReturnObject:Fire(obj)
-	self.Mutex:unlock()
 end
 
 function SimplePool:Prewarm(amount: number)
@@ -96,12 +85,13 @@ function SimplePool:Prewarm(amount: number)
 		warn("Cannot prewarm pool: template is nil")
 		return
 	end
-	-- wtf bro
-	--self.Mutex:lock()
 	for i = 1, amount do
 		table.insert(self.Pool, self.template:Clone())
 	end
-	--self.Mutex:unlock()
 end
 
 return SimplePool
+
+-- you know what 
+--- im tired of this shit
+--- this is not impressive this is shit

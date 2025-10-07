@@ -94,7 +94,7 @@ function SimplePool:Prewarm(amount: number)
 end
 
 function SimplePool:Clear()
-	for _, v in self.Pool do
+	for _, v : Instance in self.Pool do
 		v:Destroy()
 	end
 	self.Pool = {}

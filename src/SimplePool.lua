@@ -5,7 +5,6 @@
 - Date : Saturday, October 4, 2568 BE
 - Dependencies: Requires Signal (event handling) ModuleScripts.
 ]]
--- suck my penis
 -- i like sonic feets
 
 --[[

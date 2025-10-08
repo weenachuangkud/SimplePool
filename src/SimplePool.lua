@@ -10,7 +10,7 @@
 
 --[[
 SimplePool: A ModuleScript Library
-- A simple, easy-to-use, statically typed, and thread-safe object pool for reusing Roblox Instances, reducing instantiation overhead.
+- A simple, easy-to-use, statically typed, object pool for reusing Roblox Instances, reducing instantiation overhead.
 - Features:
   - Statically typed with Luau type annotations for type safety.
   - Simple API: `new`, `GetObject`, `ReturnObject`, `Prewarm`.

@@ -43,7 +43,7 @@ export type ObjectPool = {
 }
 
 -- SimplePool 
-local SimplePool = {}
+local SimplePool = {} :: SimplePool
 SimplePool.__index = SimplePool
 
 function SimplePool.new(template: Instance)

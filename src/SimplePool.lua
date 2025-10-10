@@ -31,6 +31,9 @@ local Signal = require(Libraries.Packet.Signal)
 
 -- Def
 export type ObjectPool = {
+	new : (template : Instance) -> ObjectPool
+	__index : ObjectPool
+	
 	Type: "SimplePool",
 	Pool: {Instance},
 	GetObject: (self: ObjectPool) -> Instance?,

@@ -17,3 +17,10 @@ How to Prewarm(Clonings Template Instance) :
 ```luau
 Pool:Prewarm(10)
 ```
+How to Get And Return an Object 
+(Notices: if you use `Pool:GetObject()` and `Pool.Pool` is Empty, it will Clone the Template and use the Template instead
+```luau
+local Obj = Pool:GetObject()
+-- do something
+Pool:ReturnObject(Obj)
+```

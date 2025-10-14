@@ -36,6 +36,7 @@ export type ObjectPool = {
 	
 	Type: "SimplePool",
 	Pool: {Instance},
+	activeObjects: {Instance : boolean},
 	GetObject: (self: ObjectPool) -> Instance?,
 	ReturnObject: (self: ObjectPool, obj: Instance) -> (),
 	Prewarm: (self: ObjectPool, amount: number) -> (),
@@ -53,6 +54,7 @@ function SimplePool.new(template: Instance)
 	local self = (setmetatable({}, SimplePool) :: any) :: ObjectPool
 	self.Type = "SimplePool"
 	self.Pool = {}
+	self.activeObjects = {}
 	self.template = template
 	self.OnGetObject = Signal() 
 	self.OnReturnObject = Signal()
@@ -60,18 +62,10 @@ function SimplePool.new(template: Instance)
 end
 
 function SimplePool:GetObject(): Instance?
-	local obj
-	if #self.Pool > 0 then
-		obj = table.remove(self.Pool)
+	local obj = #self.Pool > 0 and table.remove(self.Pool) or self.template:Clone()
+	if obj then
+		self.activeObjects[obj] = true
 		self.OnGetObject:Fire(obj)
-	else
-		-- If pool is empty, create a new object from template
-		if self.template then
-			obj = self.template:Clone()
-			self.OnGetObject:Fire(obj)
-		else
-			warn("No template available to create new object")
-		end
 	end
 	return obj
 end
@@ -82,6 +76,7 @@ function SimplePool:ReturnObject(obj: Instance)
 		return
 	end
 	table.insert(self.Pool, obj)
+	self.activeObjects[obj] = false
 	self.OnReturnObject:Fire(obj)
 end
 
@@ -96,10 +91,18 @@ function SimplePool:Prewarm(amount: number)
 end
 
 function SimplePool:Clear()
+	self.OnGetObject:DisconnectAll()
+    self.OnReturnObject:DisconnectAll()
+
+	for v, _ : Instance in self.activeObjects do
+		v:Destroy()
+	end
+
 	for _, v : Instance in self.Pool do
 		v:Destroy()
 	end
 	self.Pool = {}
+	self.activeObjects = {}
 end
 
 return SimplePool

@@ -24,3 +24,17 @@ local Obj = Pool:GetObject()
 -- do something
 Pool:ReturnObject(Obj)
 ```
+How to Clear?
+```luau
+Pool:Clear()
+```
+How to Use Signals?
+```luau
+Pool.OnGetObject:Connect(function(obj)
+    print(obj.Name .. " : GET")
+end
+
+Pool.OnReturnObject:Connect(function(obj)
+    print(obj.Name .. " : RET")
+end
+```

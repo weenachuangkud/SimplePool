@@ -6,3 +6,14 @@ Licesnse Under : MIT Licesnse
 Copyright(c) 2025 Mawin CK
 ---
 ## API :
+How to Create SimplePool :
+```luau
+local SimplePool = require(PathTo.SimplePool)
+local template : Insance = YourTemplateInstance
+
+local Pool = SimplePool.new()
+```
+How to Prewarm(Clonings Template Instance) :
+```luau
+Pool:Prewarm(10)
+```

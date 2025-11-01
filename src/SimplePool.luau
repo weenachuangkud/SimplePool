@@ -29,22 +29,25 @@ local Signal = require(Libraries.Packet.Signal)
 -- Types
 --type Pool = {Instance} -- who tf put this
 
+
 -- Def
 export type ObjectPool = {
-	new : (template : Instance) -> ObjectPool
-	__index : ObjectPool
-	
+	new : (template : Instance) -> ObjectPool,
+	__index : ObjectPool,
+
 	Type: "SimplePool",
 	Pool: {Instance},
-	activeObjects: {Instance : boolean},
+	activeObjects: {[Instance] : boolean},
 	GetObject: (self: ObjectPool) -> Instance?,
 	ReturnObject: (self: ObjectPool, obj: Instance) -> (),
 	Prewarm: (self: ObjectPool, amount: number) -> (),
 	Clear : (self: ObjectPool) -> (),
 	template: Instance,
-	OnGetObject: Signal.Signal, -- Def: <A... = ()>
+	-- Lmao
+	OnGetObject : Signal.Signal, -- Def: <A... = ()>
 	OnReturnObject: Signal.Signal -- Def: <A... = ()>
 }
+-- NOTE : LMAO
 
 -- SimplePool 
 local SimplePool = {} :: ObjectPool
@@ -56,7 +59,7 @@ function SimplePool.new(template: Instance)
 	self.Pool = {}
 	self.activeObjects = {}
 	self.template = template
-	self.OnGetObject = Signal() 
+	self.OnGetObject = Signal()
 	self.OnReturnObject = Signal()
 	return self
 end
@@ -91,10 +94,10 @@ function SimplePool:Prewarm(amount: number)
 end
 
 function SimplePool:Clear()
-	self.OnGetObject:DisconnectAll()
-    self.OnReturnObject:DisconnectAll()
+	self.OnGetObject = Signal()
+	self.OnReturnObject = Signal()
 
-	for v, _ : Instance in self.activeObjects do
+	for v : Instance, _ in self.activeObjects do
 		v:Destroy()
 	end
 
